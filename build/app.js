@@ -44,21 +44,72 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var component = __webpack_require__(1);
+	/* WEBPACK VAR INJECTION */(function(__dirname) {var express = __webpack_require__(1);
+	var app = express(); // create our app w/ express
+	var morgan = __webpack_require__(2); // log requests to the console (express4)
+	var bodyParser = __webpack_require__(3); // pull information from HTML POST (express4)
+	var methodOverride = __webpack_require__(4); // simulate DELETE and PUT (express4)
 
-	document.body.appendChild(component());
+	var routes = __webpack_require__(5);
+
+	// configuration =================
+
+
+	app.use(express.static(__dirname + '/public')); // set the static files location /public/img will be /img for users
+	app.use(morgan('dev')); // log every request to the console
+	app.use(bodyParser.urlencoded({ 'extended': 'true' })); // parse application/x-www-form-urlencoded
+	app.use(bodyParser.json()); // parse application/json
+	app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse application/vnd.api+json as json
+	app.use(methodOverride());
+
+	app.use('/', routes); // when you hit the root route, use this
+	// listen (start app with node server.js) ======================================
+	app.listen(3001);
+	console.log("App listening on port 3001");
+	/* WEBPACK VAR INJECTION */}.call(exports, "/"))
 
 /***/ },
 /* 1 */
 /***/ function(module, exports) {
 
-	module.exports = function () {
-	  var element = document.createElement('h1');
+	module.exports = require("express");
 
-	  element.innerHTML = 'Hello world';
+/***/ },
+/* 2 */
+/***/ function(module, exports) {
 
-	  return element;
-	};
+	module.exports = require("morgan");
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	module.exports = require("body-parser");
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	module.exports = require("method-override");
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var express = __webpack_require__(1);
+	var router = express.Router(); // google express Router() later
+
+	// router  supports .use .get .post. put. patch .delete
+
+	router.get('/home', function (req, res, next) {
+	    res.send('gob bleuth');
+	});
+
+	router.get('/', function (req, res) {
+	    res.sendfile('./public/index.html');
+	});
+
+	module.exports = router;
 
 /***/ }
 /******/ ]);

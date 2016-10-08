@@ -12,7 +12,11 @@
     "morgan": "^1.1.1"
   },
   "devDependencies": {
+    "babel-loader": "^6.2.5",
+    "css-loader": "^0.25.0",
     "html-webpack-plugin": "^2.22.0",
+    "nodemon": "^1.11.0",
+    "style-loader": "^0.13.1",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.16.2",
     "webpack-merge": "^0.14.1",

@@ -18,5 +18,5 @@
 
     app.use('/', routes);  // when you hit the root route, use this
     // listen (start app with node server.js) ======================================
-    app.listen(8080);
-    console.log("App listening on port 8080");
+    app.listen(3001);
+    console.log("App listening on port 3001");

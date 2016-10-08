@@ -1,46 +1,25 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+'use strict';
+var path = require('path');
+var fs = require('fs');
+var nodeModules = {};
 
-const merge = require('webpack-merge');
-const validate = require('webpack-validator');
-const parts = require('./libs/parts');
+fs.readdirSync(path.resolve(__dirname, 'node_modules'))
+    .filter(x => ['.bin'].indexOf(x) === -1)
+    .forEach(mod => { nodeModules[mod] = `commonjs ${mod}`; });
 
-
-const PATHS = {
-  app: path.join(__dirname, 'app'),
-  build: path.join(__dirname, 'build')
-};
-
-const common = {
-  entry: {
-    app: PATHS.app
-  },
+module.exports = {
+  entry: './server.js',
   output: {
-    path: PATHS.build,
-    filename: '[name].js'
+    path: './build',
+    filename: 'app.js'
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      title: 'Luna Alison Alvarez (WIP)'
-    })
-  ]
-};
-
-var config;
-
-switch(process.env.npm_lifecycle_event) {
-  case 'build':
-    config = merge(common, {});
-    break;
-  default:
-    config = merge(
-      common,
-      parts.devServer({
-        // Customize host/port here if needed
-        host: process.env.HOST,
-        port: process.env.PORT
-      })
-    )
+  externals: nodeModules,
+  module: {
+    loaders: [
+        { test: /\.js$/,
+          loaders: ['babel-loader']
+        },
+        { test:  /\.json$/, loader: 'json-loader' },
+    ]
+  },
 }
-
-module.exports = validate(config);
